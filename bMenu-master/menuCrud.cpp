@@ -48,7 +48,6 @@ void masukanBanyakData() {
     cout << "Masukan jumlah data yang ingin ditambahkan: ";
     cin >> jumlah;
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
-
     for (int i = 0; i < jumlah; i++) {
         if (pos >= 29) { // Membatasi jumlah maksimal data
             cout << "Data penuh! Tidak bisa menambahkan lebih banyak data.\n";
@@ -58,7 +57,6 @@ void masukanBanyakData() {
         masukanData();
     }
 }
-
 // Fungsi untuk menampilkan semua data mahasiswa
 void tampilkanSemuaData() {
     clearScreen();
@@ -66,6 +64,7 @@ void tampilkanSemuaData() {
         cout << "Belum ada data yang dimasukkan.\n";
         return;
     }
+
     cout << "Data Mahasiswa:\n";
     cout << "------------------------------------\n";
     for (int i = 0; i <= pos; i++) {
@@ -77,15 +76,52 @@ void tampilkanSemuaData() {
         cout << "------------------------------------\n";
     }
 }
+
+// Fungsi untuk memperbarui data mahasiswa berdasarkan indeks
+void perbaruiData() {
+    clearScreen();
+    if (pos == -1) { // Jika tidak ada data
+        cout << "Belum ada data yang dimasukkan.\n";
+        return;
+    }
+    int index;
+    cout << "Masukkan indeks data yang ingin diperbarui (1-" << pos + 1 << "): ";
+    cin >> index;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
+    if (index < 1 || index > pos + 1) {
+        cout << "Indeks tidak valid.\n";
+        return;
+    }
+    // Kurangi indeks dengan 1 untuk mencocokkan array
+    index--;
+    cout << "Data lama:\n";
+    cout << "NIM     : " << sikc[index].nim << endl;
+    cout << "Nama    : " << sikc[index].nama << endl;
+    cout << "Alamat  : " << sikc[index].alamat << endl;
+    cout << "IPK     : " << sikc[index].ipk << endl;
+    cout << "\nMasukkan data baru:\n";
+    cout << "Masukan NIM: ";
+    getline(cin, sikc[index].nim);
+    cout << "Masukan Nama: ";
+    getline(cin, sikc[index].nama);
+    cout << "Masukan Alamat: ";
+    getline(cin, sikc[index].alamat);
+    cout << "Masukan IPK: ";
+    cin >> sikc[index].ipk;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
+    cout << "Data berhasil diperbarui!\n";
+}
 int main() {
     int pilihan;
     do {
         clearScreen();
         cout << "Menu Crud :\n";
+        cout << "Menu Crud:\n";
         cout << "1. Masukkan Data\n";
         cout << "2. Masukkan Banyak Data\n";
-        cout << "3. Keluar\n";
         cout << "3. Tampilkan Semua Data\n";
+        cout << "2. Tampilkan Semua Data\n";
+        cout << "3. Perbarui Data\n";
         cout << "4. Keluar\n";
         cout << "Pilihan: ";
         cin >> pilihan;
@@ -97,9 +133,11 @@ int main() {
             break;
         case 2:
             masukanBanyakData();
+            tampilkanSemuaData();
             break;
         case 3:
             tampilkanSemuaData();
+            perbaruiData();
             break;
         case 4:
             cout << "Keluar dari program.\n";
@@ -109,12 +147,10 @@ int main() {
             break;
         }
 
-        if (pilihan != 3) {
         if (pilihan != 4) {
             cout << "\nTekan Enter untuk kembali ke menu...";
             cin.get();
         }
-    } while (pilihan != 3);
     } while (pilihan != 4);
 
     return 0;
