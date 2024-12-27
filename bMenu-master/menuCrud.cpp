@@ -42,21 +42,6 @@ void masukanData() {
     cout << "Data berhasil ditambahkan!\n";
 }
 
-// Fungsi untuk memasukkan banyak data mahasiswa
-void masukanBanyakData() {
-    int jumlah;
-    cout << "Masukan jumlah data yang ingin ditambahkan: ";
-    cin >> jumlah;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
-    for (int i = 0; i < jumlah; i++) {
-        if (pos >= 29) { // Membatasi jumlah maksimal data
-            cout << "Data penuh! Tidak bisa menambahkan lebih banyak data.\n";
-            return;
-        }
-        cout << "\nData ke-" << i + 1 << ":\n";
-        masukanData();
-    }
-}
 // Fungsi untuk menampilkan semua data mahasiswa
 void tampilkanSemuaData() {
     clearScreen();
@@ -84,21 +69,26 @@ void perbaruiData() {
         cout << "Belum ada data yang dimasukkan.\n";
         return;
     }
+
     int index;
     cout << "Masukkan indeks data yang ingin diperbarui (1-" << pos + 1 << "): ";
     cin >> index;
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
+
     if (index < 1 || index > pos + 1) {
         cout << "Indeks tidak valid.\n";
         return;
     }
+
     // Kurangi indeks dengan 1 untuk mencocokkan array
     index--;
+
     cout << "Data lama:\n";
     cout << "NIM     : " << sikc[index].nim << endl;
     cout << "Nama    : " << sikc[index].nama << endl;
     cout << "Alamat  : " << sikc[index].alamat << endl;
     cout << "IPK     : " << sikc[index].ipk << endl;
+
     cout << "\nMasukkan data baru:\n";
     cout << "Masukan NIM: ";
     getline(cin, sikc[index].nim);
@@ -109,20 +99,45 @@ void perbaruiData() {
     cout << "Masukan IPK: ";
     cin >> sikc[index].ipk;
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
+
     cout << "Data berhasil diperbarui!\n";
+}
+
+// Fungsi untuk menghapus data mahasiswa berdasarkan indeks
+void hapusData() {
+    clearScreen();
+    if (pos == -1) { // Jika tidak ada data
+        cout << "Belum ada data yang dimasukkan.\n";
+        return;
+    }
+    int index;
+    cout << "Masukkan indeks data yang ingin dihapus (1-" << pos + 1 << "): ";
+    cin >> index;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
+    if (index < 1 || index > pos + 1) {
+        cout << "Indeks tidak valid.\n";
+        return;
+    }
+    // Kurangi indeks dengan 1 untuk mencocokkan array
+    index--;
+    // Geser elemen setelah indeks yang dihapus ke kiri
+    for (int i = index; i < pos; i++) {
+        sikc[i] = sikc[i + 1];
+    }
+    pos--; // Kurangi jumlah data
+    cout << "Data berhasil dihapus!\n";
 }
 int main() {
     int pilihan;
     do {
         clearScreen();
-        cout << "Menu Crud :\n";
         cout << "Menu Crud:\n";
         cout << "1. Masukkan Data\n";
-        cout << "2. Masukkan Banyak Data\n";
-        cout << "3. Tampilkan Semua Data\n";
         cout << "2. Tampilkan Semua Data\n";
         cout << "3. Perbarui Data\n";
         cout << "4. Keluar\n";
+        cout << "4. Hapus Data\n";
+        cout << "5. Keluar\n";
         cout << "Pilihan: ";
         cin >> pilihan;
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan input buffer
@@ -132,14 +147,15 @@ int main() {
             masukanData();
             break;
         case 2:
-            masukanBanyakData();
             tampilkanSemuaData();
             break;
         case 3:
-            tampilkanSemuaData();
             perbaruiData();
             break;
         case 4:
+            hapusData();
+            break;
+        case 5:
             cout << "Keluar dari program.\n";
             break;
         default:
@@ -148,10 +164,12 @@ int main() {
         }
 
         if (pilihan != 4) {
+        if (pilihan != 5) {
             cout << "\nTekan Enter untuk kembali ke menu...";
             cin.get();
         }
     } while (pilihan != 4);
+    } while (pilihan != 5);
 
     return 0;
 }
